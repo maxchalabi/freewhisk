@@ -9,5 +9,5 @@ Technological developments are starting to allow us to record neuronal activity 
 
 The method is particularly useful in conditions where we might be dealing with a lot of noise; uneven background illumination, paws moving in proxomity of the whiskers, uneven camera focus, different rows of whiskers moving in and out of focus as mice lift and rotate their head (whiskers also move in 3D space), whiskers interacting with an object, etc....
 
-All we need for it to work is a video of a mouse taken from abive, the tracked nose xy coordinates and head direction coordinates for the video.
+All we need for it to work is a video of a mouse taken from above, the tracked nose xy coordinates and head direction coordinates for the video.
 
