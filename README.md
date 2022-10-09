@@ -1,5 +1,5 @@
 # freewhisk
-A whisker tracking algorithm specialized for freely moving, untrimmed mice. 
+A whisker movement tracking algorithm specialized for freely moving, untrimmed mice. 
 
 There are multiple sophisticated algorithms out there for tracking the shape and displacement of whiskers in rodents, which they use to sense their tactile surroundings. These algorithms work best for head-fixed animals, where background noise and artefacts can be kep at a minimum. The mouse whisker system has indeed become a popular neuroscientific model to study tactile sensory processing and these whisker tracking algorithms were very helpful in linking whisker bending or whisker motor movement to neuronal signals.
 
