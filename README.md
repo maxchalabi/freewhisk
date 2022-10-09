@@ -1,5 +1,11 @@
 # freewhisk
 A whisker tracking algorithm specialized for freely moving, untrimmed mice. 
 
-There are multiple sophisticated algorithms out there for tracking the shape and displacement of whiskers in rodents, which they use to sense their tactile surroundings. The mouse whisker system has indeed become a popular neuroscientific model to study tactile sensory processing. Whilst most neuroscientific research in this field of study has been performed in head-fixed animals, in part due to the greater control over experimental conditions, technological developments are starting to allow us to record neuronal activity in freely moving animals.
+There are multiple sophisticated algorithms out there for tracking the shape and displacement of whiskers in rodents, which they use to sense their tactile surroundings. These algorithms work best for head-fixed animals, where background noise and artefacts can be kep at a minimum. The mouse whisker system has indeed become a popular neuroscientific model to study tactile sensory processing and these whisker tracking algorithms were very helpful in linking whisker bending or whisker motor movement to neuronal signals.
+
+Technological developments are starting to allow us to record neuronal activity in freely moving rodents, and with that we need ways to quantify whisking dynamics of these animals under conditions where 'conventional' whisker tracking systems become unreliable. Unlike other whisker tracking algorithms which aim to identify the shapes and track the kinematics of individual whiskers, freewhisk provides a very basic approach to extract a global whisking envelope, without focusing on more precise measures like curvature.
+
+The method is particularly useful in conditions where we might be dealing with a lot of noise; uneven background illumination, paws moving in prxomity of the whiskers, uneven camera focus, different rows of whiskers moving in and out of focus as mice lift and rotate their head (whiskers also move in 3D space), whiskers interacting with an object, etc....
+
+All we need for it to work is a video of a mouse taken from abive, the tracked nose xy coordinates and head direction coordinates for the video.
 
