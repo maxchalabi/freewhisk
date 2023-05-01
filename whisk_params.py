@@ -132,7 +132,7 @@ def compute_trial_amps_and_speeds(mean_angle, amp_smooth=31, speed_smooth=51):
     return whisk_params[0], all_max_amps, all_whisk_speeds, whisk_params[3]
 
 
-def compute_trial_phases_and_freqs(mean_angle, freq_smooth=11):
+def compute_trial_phases_and_freqs(mean_angle, freq_smooth=51):
     """
     Function to compute the whisking phase and frequency from the extracted whisking envelope.
 
