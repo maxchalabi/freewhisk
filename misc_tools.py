@@ -264,3 +264,33 @@ def subsample_image(xs, ys, img):
     weights += np.multiply(img[pys+1, pxs, :].T    , wxs*dys).T
     weights += np.multiply(img[pys+1, pxs+1, :].T  , dxs*dys).T
     return weights
+
+
+# Function to rotate a point around another point by theta
+def rotate_around_point(xy, radians, origin=(0, 0)):
+    """
+    Rotate a point around another point by theta
+
+    Parameters
+    ----------
+    xy : tuple
+        x and y coordinates of points to be rotated
+    radians : float
+        angle of rotation in radians
+    origin : tuple, optional
+        x and y coordinates of origin point. The default is (0, 0).
+
+    Returns
+    -------
+    qx : float
+        rotated x coordinates
+    qy : float
+        rotated y coordinates
+
+    """
+    
+    x, y = xy
+    ox, oy = origin
+    qx = ox + np.cos(radians) * (x - ox) - np.sin(radians) * (y - oy)
+    qy = oy + np.sin(radians) * (x - ox) + np.cos(radians) * (y - oy)
+    return qx, qy
