@@ -1,0 +1,118 @@
+# Freewhisk - Whisker Tracking Library Project
+
+## Project Overview
+Freewhisk is a Python library for analyzing whisker movements in freely moving mice, developed for neuroscience research. The library processes high-speed video recordings to extract detailed whisker kinematics.
+
+## Current Status: Creating Methods Figure - COMPLETED
+- Successfully identified the key functions for whisker tracking process visualization
+- Created comprehensive example code for generating the whisker tracking process figure
+- Figure will show: DLC coordinates, repositioned contour, offset contour, polynomial fit, and sampling line
+- Using the same frame/trial/session as previous figures (400, 5, 4366) for consistency
+- Code leverages existing freewhisk functions: reposition_whiskerpad_contour, rotate_whiskerpad_contour, create_offset_parallel_line, new_designate_roi_line
+- **COMPLETED**: Peak tracking algorithm figure showing 5-step process from peak detection to global envelope extraction
+- **COMPLETED**: Individual whisker tracking figure showing 5-step multi-target tracking process with least-squares stitching
+
+## Library Architecture
+
+### Core Modules
+1. **whisk_extract.py**: Core whisker tracking and pixel extraction
+   - `calculate_average_whiskerpad_contour()`: Computes template whisker pad shape
+   - `reposition_whiskerpad_contour()`: Repositions contour to match nose position
+   - `rotate_whiskerpad_contour()`: Rotates contour to match whisker pad orientation
+   - `create_offset_parallel_line()`: Creates 7-pixel offset parallel line
+   - `new_designate_roi_line()`: Fits polynomial and creates sampling line
+   - `new_extract_raw_whisk()`: Extracts raw whisker pixel intensities
+   - ROI creation and frame-by-frame processing
+
+2. **whisk_params.py**: High-level parameter extraction
+   - `extract_whisking_envelope()`: Global whisker movement envelope
+   - `compute_trial_amps_and_speeds()`: Amplitude and speed calculations
+   - `compute_trial_phases_and_freqs()`: Phase and frequency analysis
+
+3. **whisk_setpoint.py**: Individual whisker tracking
+   - `extract_setpoint_and_spread()`: Multi-target whisker tracking
+   - `Track` class: Individual whisker trajectory management
+   - Advanced trace stitching with least-squares optimization
+
+4. **whisk_tools.py**: Low-level tracking utilities
+   - Peak detection and tracking algorithms
+   - Sliding window mean moving peak analysis
+   - Phase and frequency computation functions
+
+5. **misc_tools.py**: General utilities
+   - `rotate_around_point()`: Point rotation utility
+   - Video processing and array manipulation
+   - Mathematical utilities (interpolation, smoothing)
+   - Data structure utilities
+
+## Algorithm Pipeline (4 Stages)
+
+### Preprocessing: Global Whisker Envelope Extraction
+- Peak detection with sliding window tracking (3 frames)
+- Least-squares optimization for trajectory stitching
+- Generates global movement template for normalization
+
+### Stage 1: Video Preprocessing
+- Crop and orient whisker-focused video regions
+- Compensate for head movement using 2D tracking
+- Generate standardized 150x150 pixel whisker videos
+
+### Stage 2: Whisker Pad Detection
+- DeepLabCut neural network for anatomical landmarks
+- 6-point whisker pad contour detection (nose + 5 whisker pad points)
+- DBSCAN outlier detection and correction
+
+### Stage 3: Whisker Setpoint Tracking
+- **Sub-stage 3a**: Peak normalization using global envelope template
+- **Multi-target tracking**: Individual whisker trajectory management with Track class
+- **Sub-stage 3b**: Least-squares optimization for trace stitching
+- **Setpoint computation**: Central tendency of individual whisker positions
+
+### Stage 4: Parameter Extraction
+- **Phases**: Peaks/valleys detection from setpoint trace (0-2 scale)
+- **Frequencies**: Instantaneous frequency from phase crossings
+- **Amplitudes**: Instantaneous and maximum cycle amplitudes
+- **Speeds**: Temporal derivatives of amplitude signals
+- **Direction**: Protraction/retraction classification
+
+## Key Features
+- Robust tracking through occlusions and measurement artifacts
+- Adaptive thresholding based on data distribution
+- Multi-target tracking with bifurcation handling
+- Comprehensive quality control and reliability assessment
+- Efficient processing for large datasets (500Hz video)
+
+## Dependencies
+- OpenCV for video processing
+- DeepLabCut for landmark detection
+- SciPy for signal processing and optimization
+- NumPy/Pandas for data structures
+- Matplotlib for visualization
+
+## Recent Achievements
+- Completed comprehensive methods documentation
+- Corrected algorithm description to properly distinguish preprocessing vs. core tracking stages
+- Properly described whisker setpoint tracking as the main Stage 3 algorithm
+- Both preprocessing and core tracking now use advanced least-squares optimization
+- Rewrote introduction paragraphs to better reflect the freewhisk philosophy and approach
+- Emphasized focus on global envelope extraction vs. individual whisker tracking
+- Highlighted challenges specific to freely moving animals vs. head-fixed preparations
+- Algorithm description suitable for peer-reviewed publication
+- Technical details aligned with code implementation
+- Maintained scientific writing standards
+
+## Current Task: Methods Figure Creation
+- **Objective**: Create figure illustrating whisker tracking process
+- **Progress**: Created complete example code showing all steps
+- **Next Steps**: 
+  - Test and refine the figure generation code
+  - Ensure all visual elements are clearly distinguishable
+  - Add any additional annotations or labels needed
+  - Integrate with existing figure generation workflow
+
+## Next Steps
+- Complete methods figure creation and testing
+- Implementation testing and validation
+- Performance optimization
+- Integration with behavioral analysis pipelines
+- Documentation of usage examples 

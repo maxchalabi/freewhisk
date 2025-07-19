@@ -5,12 +5,12 @@ import pandas as pd
 import whisk_tools, misc_tools
 
 
-def extract_whisking_envelope(whisk_arr, prominence=0.03, cutoff=4, pixel_scale=100, bin_size=3, mean_setpoint = 60):
+def extract_whisking_envelope(whisk_arr, prominence=0.1, cutoff=4, pixel_scale=0.5, bin_size=3, mean_setpoint = 60):
     """
     This function reunites some of the functions in whisk_tools into a single function
     to extract the global motion of the whiskerpad from the raw whisker pixel data.
 
-    Parameters
+    Parameters 
     ----------
     whisk_arr : 150 x 500 numpy array
         raw whisker pixel data
@@ -40,7 +40,7 @@ def extract_whisking_envelope(whisk_arr, prominence=0.03, cutoff=4, pixel_scale=
     return mean_angle
 
 
-def compute_trial_amps_and_speeds(mean_angle, amp_smooth=31, speed_smooth=51):
+def compute_trial_amps_and_speeds(mean_angle, speed_smooth=31):
     """
     Function to compute the whisking amplitude, speed and whether the animal is pro- or retracting from the extracted whisking envelope.
 
@@ -126,13 +126,12 @@ def compute_trial_amps_and_speeds(mean_angle, amp_smooth=31, speed_smooth=51):
         for wp in range(len(whisk_params)):
             whisk_params[wp].extend(w_params[wp])
     
-    all_max_amps = misc_tools.savgol_smooth(whisk_params[1], window_size=amp_smooth)
     all_whisk_speeds = misc_tools.savgol_smooth(whisk_params[2], window_size=speed_smooth)
 
-    return whisk_params[0], all_max_amps, all_whisk_speeds, whisk_params[3]
+    return whisk_params[0], whisk_params[1], all_whisk_speeds, whisk_params[3]
 
 
-def compute_trial_phases_and_freqs(mean_angle, freq_smooth=51):
+def compute_trial_phases_and_freqs(mean_angle, freq_smooth=31):
     """
     Function to compute the whisking phase and frequency from the extracted whisking envelope.
 
@@ -155,6 +154,7 @@ def compute_trial_phases_and_freqs(mean_angle, freq_smooth=51):
 
     all_phases = []
     all_freqs = []
+    inst_freqs = []
 
     slices, values = misc_tools.detect_contiguity(mean_angle, np.nan)
 
@@ -166,17 +166,17 @@ def compute_trial_phases_and_freqs(mean_angle, freq_smooth=51):
             
             if len(pvs) > 2:
                 phases = whisk_tools.get_phases(pvs, pv_index, mean_angle[slic[0]:slic[1]])       
-                whisking_freq = whisk_tools.get_whisking_frequencies(phases, pvs)
+                instantaneous_freq = whisk_tools.get_instantaneous_whisking_frequencies(phases, pvs)
             else:
                 phases = [np.nan]*len(mean_angle[slic[0]:slic[1]])
-                whisking_freq = [np.nan]*len(mean_angle[slic[0]:slic[1]])
+                instantaneous_freq = [np.nan]*len(mean_angle[slic[0]:slic[1]])
         else: 
             phases = [np.nan]* len(mean_angle[slic[0]:slic[1]])
-            whisking_freq = [np.nan]* len(mean_angle[slic[0]:slic[1]])
+            instantaneous_freq = [np.nan]* len(mean_angle[slic[0]:slic[1]])
 
         all_phases.extend(phases)
-        all_freqs.extend(whisking_freq)
+        inst_freqs.extend(instantaneous_freq)
 
-    all_freqs = misc_tools.savgol_smooth(all_freqs, window_size=freq_smooth)
+    smoothed_inst_freqs = misc_tools.savgol_smooth(inst_freqs, window_size=freq_smooth)
 
-    return all_phases, all_freqs
+    return all_phases, smoothed_inst_freqs

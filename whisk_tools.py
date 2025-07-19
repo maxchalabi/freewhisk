@@ -543,7 +543,7 @@ def get_phases(pvs, pv_index, mean_angle):
     return value_array
 
 
-def get_whisking_frequencies(phases, pvs):
+def get_instantaneous_whisking_frequencies(phases, pvs):
     """
     Compute whisking phases from our whisking envelope data.
 
@@ -654,4 +654,53 @@ def get_whisking_frequencies(phases, pvs):
             whisking_freq[current_idx] = freq
     
     return whisking_freq
+
+
+
+def get_whisking_frequencies(phases, pvs):
+    """
+    Compute whisking frequencies from our whisking envelope data.
+
+    Parameters
+    ----------
+    phases : list
+        Describes the whisking phase at each particular point in time.
+        Maximum Protraction is 1, Maximum Retraction is 0. 
+        Values between 0 and 1 mean the animal is protracting. 
+        Values between 1 and 2 mean the animal is retracting. 
+    pvs : list
+        list of indices where max protraction and retraction points are
+
+    Returns
+    -------
+    whisking_freq : list
+        Whisking frequency at each particular timepoint in Hz (Assuming sampling frequency was 500Hz),
+        with the same frequency value assigned to all timepoints within the same half-cycle.
+    """
+
+    whisking_freq = np.empty(len(phases))
+    whisking_freq[:] = np.nan
+    
+    # Need at least 3 PV points to calculate frequencies
+    if len(pvs) > 2:
+        # Process each consecutive pair of PVs (each half-cycle)
+        for i in range(len(pvs)-1):
+            start_idx = pvs[i]
+            end_idx = pvs[i+1]
+            
+            # Skip if we don't have enough points
+            if start_idx >= len(phases) or end_idx >= len(phases):
+                continue
+                
+            # Calculate half-cycle duration in frames
+            half_cycle_duration = end_idx - start_idx
+            
+            # Calculate frequency in Hz (assuming 500Hz sampling rate)
+            # Multiply by 2 because a full cycle consists of two half-cycles
+            half_cycle_freq = 500 / half_cycle_duration * 2
+            
+            # Assign this frequency to all timepoints in this half-cycle
+            whisking_freq[start_idx:end_idx] = half_cycle_freq
+    
+    return whisking_freq 
         
